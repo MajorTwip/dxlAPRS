@@ -1,0 +1,19 @@
+
+FROM frolvlad/alpine-glibc
+
+RUN apk add --no-cache wget tar sudo
+
+RUN wget -O dxlAPRS.tgz http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
+RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
+RUN ./updateDXLaprs dxlAPRS.tgz
+RUN rm dxlAPRS.tgz && mv /root/dxlAPRS/* /opt/
+ENV PATH="/opt/aprs:${PATH}"
+
+RUN mkdir /aprs && mknod /aprs/pipe.fifo p
+
+RUN echo "p 5 0\n9 8 1\nf 144.800" > /aprs/qrg0.conf
+
+ENV PORT="18000"
+ENV ADCRATE="16000"
+
+CMD sondeudp -f ${ADCRATE} -o /aprs/pipe.fifo -L omni -I MTACS21 -u 0.0.0.0:${PORT} -S 5 -c 0 -v -n 0
