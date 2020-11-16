@@ -1,4 +1,18 @@
-FROM alpine:latest
-RUN apk add --no-cache rtl-sdr
-ENTRYPOINT ["sdrtst", "-e", "-v", "-k"]
-CMD ["-t","rtltcp:1234","-r","16000", "-s", "afskmodem:1800", "-c", "/etc/sdrtst.conf"]
+FROM frolvlad/alpine-glibc
+
+RUN apk add --no-cache wget tar sudo
+
+RUN wget -O dxlAPRS.tgz http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
+RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
+RUN ./updateDXLaprs dxlAPRS.tgz
+RUN rm dxlAPRS.tgz && mv /root/dxlAPRS/* /opt/
+ENV PATH="/opt/aprs:${PATH}"
+
+RUN mkdir /aprs && mknod /aprs/pipe.fifo p
+
+RUN echo "p 5 0\n9 8 1\nf 144.800" > /aprs/qrg0.conf
+
+ENV RTLTCP="192.168.1.123:1234"
+ENV ADCRATE="16000"
+
+CMD sdrtst -t ${RTLTCP} -r 16000 -s /aprs/pipe.fifo -c /aprs/qrg0.conf -e -v -k
