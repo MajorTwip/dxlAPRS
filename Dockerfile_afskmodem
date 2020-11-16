@@ -1,7 +1,7 @@
 FROM alpine:latest
 RUN apk add --no-cache wget tar
-RUN wget http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
-RUN tar xzvf dxlAPRS* && ls
-RUN "./updateDXLaprs dxlAPRS*"
+RUN wget http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz -o dxlAPRS.tgz
+RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
+RUN "./updateDXLaprs dxlAPRS.tgz"
 ENTRYPOINT ["sdrtst", "-e", "-v", "-k"]
 CMD ["-f", "16000", "-M", "0", "-c", "0", "-L", "127.0.0.1:9001:0", "-M", "1", "-c", "1", "-L", "127.0.0.1:9002:0"]
