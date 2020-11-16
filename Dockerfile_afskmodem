@@ -8,6 +8,6 @@ RUN rm dxlAPRS.tgz && mv /root/dxlAPRS/* /opt/
 ENV PATH="/opt/aprs:${PATH}"
 RUN which sdrtst
 RUN sdrtst
-#ENTRYPOINT ["afskmodem", "-e", "-v", "-k"]
-#CMD ["-f", "16000", "-M", "0", "-c", "0", "-L", "127.0.0.1:9001:0", "-M", "1", "-c", "1", "-L", "127.0.0.1:9002:0"]
-CMD afskmodem
+ENTRYPOINT ["afskmodem", "-e", "-v", "-k"]
+CMD ["-f", "16000", "-M", "0", "-c", "0", "-L", "127.0.0.1:9001:0", "-M", "1", "-c", "1", "-L", "127.0.0.1:9002:0"]
+#CMD afskmodem
