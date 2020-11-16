@@ -3,7 +3,7 @@ RUN apk add --no-cache wget tar sudo
 RUN wget -O dxlAPRS.tgz http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
 RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
 RUN ./updateDXLaprs dxlAPRS.tgz
-RUN rm dxlAPRS.tgz && mv -r /root/dxlAPRS/* /opt/
+RUN rm dxlAPRS.tgz && mv /root/dxlAPRS/* /opt/
 ENV PATH="/opt/aprs:${PATH}"
 RUN which sdrtst
 ENTRYPOINT ["afskmodem", "-e", "-v", "-k"]
