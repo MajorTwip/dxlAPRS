@@ -15,5 +15,6 @@ RUN echo "p 5 0\n9 8 1\nf 144.800" > /aprs/qrg0.conf
 
 ENV PORT="18000"
 ENV ADCRATE="16000"
+ENV CALLSIGNSSID="CHANGEME-11"
 
-CMD sondeudp -f ${ADCRATE} -o /aprs/pipe.fifo -L omni -I MTACS21 -u 0.0.0.0:${PORT} -S 5 -c 0 -v -n 0
+CMD sondeudp -f ${ADCRATE} -o /aprs/pipe.fifo -L omni -I ${CALLSIGNSSID} -u 0.0.0.0:${PORT} -S 5 -c 0 -v -n 0
