@@ -1,6 +1,6 @@
-FROM ubuntu:latest
-#RUN apk add --no-cache wget tar sudo bash
-RUN apt-get update && apt-get install -y wget tar sudo
+FROM alpine:latest
+RUN apk add --no-cache wget tar sudo bash
+#RUN apt-get update && apt-get install -y wget tar sudo
 RUN wget -O dxlAPRS.tgz http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
 RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
 RUN ./updateDXLaprs dxlAPRS.tgz
