@@ -1,0 +1,15 @@
+FROM frolvlad/alpine-glibc
+
+RUN apk add --no-cache wget tar sudo
+
+RUN wget -O dxlAPRS.tgz http://dxlaprs.hamspirit.at/dxlAPRS_x86_64-current.tgz
+RUN tar xzvf dxlAPRS.tgz --strip=1 scripts/updateDXLaprs
+RUN ./updateDXLaprs dxlAPRS.tgz
+RUN rm dxlAPRS.tgz && mv /root/dxlAPRS/* /opt/
+ENV PATH="/opt/aprs:${PATH}"
+
+ENV RECEIVER="gate:9000"
+ENV PORT="18000"
+ENV CALLSIGNSSID="CHANGEME-11"
+
+CMD sondemod -o ${PORT} -I ${CALLSIGNSSID} -r ${RECEIVER} -b 20 -M -B 6 -A 1500 -d -p 2 -L 6=DFM06,7=PS-15,A=DFM09,B=DFM17,C=DFM09P,D=DFM17,FF=DFMx -v -N 650 -P JN36TT45BN
